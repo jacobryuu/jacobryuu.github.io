@@ -1,0 +1,53 @@
+baseURL = "https://jacobryuu.github.io"
+languageCode = "en-us"
+title = "jacob's blog"
+hasCJKLanguage = true
+theme = "maupassant-hugo"
+enableRobotsTXT = true
+PaginatePath = "page"
+publishDir = "docs"
+
+
+[author]
+    name = "jacob"
+    homepage = "https://jacobryuu.github.io"
+
+[params]
+    subtitle = "......"
+    description = "......"
+    keywords = "......"
+    customCSS = ["style.extra.css"]
+    customJS = ["app.extra.js"]
+
+[params.utteranc]
+    repo = "jacobryuu/comments"
+    issueTerm = "url"
+    theme = "github-light"
+
+donation = false
+
+[params.donation.qrcodes]
+    alipay = "alipay_qrcode.png"
+    wechat = "wechat_donation_qrcode.png"
+
+[[menu.main]]
+    identifier = "archives"
+    name = "archives"
+    url = "/archives/"
+    weight = 2
+
+[[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 3
+
+[markup]
+    [markup.highlight]
+        codeFences = true
+        noClasses = false
+        tabWidth = 4
+        lineNos = true
+    [markup.tableOfContents]
+        ordered = false
+        startLevel = 1

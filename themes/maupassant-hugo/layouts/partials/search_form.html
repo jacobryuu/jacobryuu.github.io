@@ -1,0 +1,5 @@
+{{ if eq (lower .Site.Params.search_provider) "google" }}
+    {{ partial "search_form_google" . }}
+{{ else }}
+    {{ partial "search_form_duckduckgo" . }}
+{{ end }}

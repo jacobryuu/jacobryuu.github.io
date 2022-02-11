@@ -1,0 +1,59 @@
+{{ partial "head" . }}
+<body>
+{{ partial "header" . }}
+
+<div id="body">
+    <div class="container">
+        <div class="col-group">
+
+            <div class="col-8" id="main">
+                <div class="res-cons">
+                    <article class="post">
+                        <header>
+                            <h1 class="post-title">{{ .Title }}</h1>
+                        </header>
+                        <date class="post-meta meta-date">
+                            {{ .Date.Year }}年{{ printf "%d" .Date.Month }}月{{ .Date.Day }}日
+                            {{ printf "%02d" .Date.Hour }}:{{ printf "%02d" .Date.Minute }}
+                        </date>
+                        {{ with .Params.Categories }}
+                        <div class="post-meta meta-category">
+                            ，classed as
+                            {{ range . }}
+                                <a href="{{ "/categories/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
+                            {{ end }}
+                        </div>
+                        {{ end }}
+                        {{- if gt (len .TableOfContents) 32 -}}
+                        <aside id="toc" class="dismissed">
+                            <span class="toc-title">Catalog <a href="#" class="toc-dismiss"></a></span>
+                            {{ .TableOfContents }}
+                        </aside>
+                        {{- end -}}
+                        <div class="post-content">
+                            {{ .Content }}
+                        </div>
+
+                        <div class="post-meta meta-tags">
+                            {{ if and (isset .Params "tags") .Params.tags }}
+                            <ul class="clearfix">
+                                {{ range .Params.Tags }}
+                                <li><a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a></li>
+                                {{ end }}
+                            </ul>
+                            {{ else }}
+                            without labels
+                            {{ end }}
+                        </div>
+                    </article>
+                    {{ partial "donation" . }}
+                    {{ partial "comments" . }}
+                </div>
+            </div>
+            {{ partial "sidebar" . }}
+        </div>
+    </div>
+</div>
+{{ partial "footer" . }}
+</body>
+</html>

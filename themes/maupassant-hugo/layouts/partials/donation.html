@@ -1,0 +1,25 @@
+{{/** Follow site config: if not configuired, no donation info will ever render **/}}
+{{- .Scratch.Set "donationEnabled" (isset .Site.Params "donation") -}}
+
+{{/** Page frontmatter overrides site config: a page can disable donation infor rendeirng with donation:false **/}}
+{{- if .Scratch.Get "donationEnabled" -}}
+  {{/** `with` cannot distinguish `false` from `nil`, making it useless here. Just compare with `false` for now. **/}}
+  {{- .Scratch.Set "donationEnabled" (ne $.Params.donation false) -}}
+{{- end -}}
+
+{{- if .Scratch.Get "donationEnabled" -}}
+<div id="post-donation">
+  <button id="post-donation-button" title="hidden/show Donate info">
+    Donate
+  </button>
+  <div id="post-donation-qrcodes">
+    {{- range $key, $image := .Site.Params.donation.qrcodes -}}
+    <div class="post-donation-qrcode {{ $key }}">
+      <img src="{{ $image | absURL}}">
+      {{/** Translations **/}}
+      <p>Via {{ $key | humanize }}</p>
+    </div>
+    {{- end -}}
+  </div>
+</div>
+{{- end -}}

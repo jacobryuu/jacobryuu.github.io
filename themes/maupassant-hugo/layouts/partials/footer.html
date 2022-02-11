@@ -1,0 +1,16 @@
+<footer id="footer">
+    <div class="container">
+      &copy; {{ now.Format "2006" }} <a rel="nofollow" href="{{ .Site.BaseURL | absURL }}">{{ .Site.Title }}</a>.
+        Powered by <a rel="nofollow noreferer noopener" href="https://gohugo.io">Hugo</a> &amp; <a rel="nofollow noreferer noopener" href="https://github.com/JokerQyou/maupassant-hugo">maupassant theme</a>.
+    </div>
+</footer>
+
+<script type="text/javascript" src="{{ "js/app.js" | relURL}}" defer></script>
+
+{{/** Extra custom Javascript files **/}}
+{{- range .Site.Params.customJS }}
+<script type="text/javascript" src="{{ "js/" | relURL}}{{ . }}" defer></script>
+{{ end -}}
+
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' defer></script>
+

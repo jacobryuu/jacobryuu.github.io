@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="{{ with .Site.LanguageCode }}{{ . }}{{ else }}zh-CN{{end}}">
+<head>
+
+    <meta charset="utf-8">
+    {{ .Hugo.Generator }}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {{ if .IsHome -}}
+    <title>{{ .Site.Title }}</title>
+    <meta property="og:title" content="{{ .Site.Title }}{{ with .Site.Params.subtitle }} - {{ . }}{{ end }}">
+    <meta property="og:type" content="website">
+    <meta name="description" content="{{ .Site.Params.description }}">
+    {{ with .Site.Params.keywords }}
+    <meta name="keywords" content="{{ . }}">
+    {{ end }}
+    {{- else -}}
+    <title>{{ .Title }} - {{ .Site.Title }}</title>
+    <meta property="og:title" content="{{ .Title }} - {{ .Site.Title }}">
+    <meta property="og:type" content="article">
+        {{ with .Params.date }}
+    <meta property="article:published_time" content="{{ .Format "2006-01-02T15:04:05+08:00" }}">
+        {{ end }}
+        {{ with .Params.lastmod }}
+    <meta property="article:modified_time" content="{{ .Format "2006-01-02T15:04:05+08:00" }}">
+        {{ end }}
+    <meta name="description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Title }}{{ end }}">
+        {{ if .Params.author -}}
+    <meta name="author" content="{{ .Params.author }}">
+        {{ else }}
+    <meta name="author" content="{{ .Site.Author.name }}">
+        {{- end }}
+    {{- end }}
+    <meta property="og:url" content="{{ .Permalink }}">
+
+    {{ range .AlternativeOutputFormats -}}
+    <link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink | safeURL }}" title="{{ $.Site.Title }}">
+    {{ end -}}
+
+    <link rel="stylesheet" href="{{ "css/normalize.css" | relURL}}">
+    {{ if .IsPage }}
+    <link rel="stylesheet" href="{{ "css/syntax.css" | relURL }}">
+    {{ end }}
+    <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+
+    {{/** Extra custom stylesheets **/}}
+    {{- range .Site.Params.customCSS }}
+    <link rel="stylesheet" href="{{ "css/" | relURL }}{{ . }}">
+    {{ end -}}
+</head>

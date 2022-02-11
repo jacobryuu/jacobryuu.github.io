@@ -1,0 +1,2 @@
+# jacobryuu.github.io
+blog
