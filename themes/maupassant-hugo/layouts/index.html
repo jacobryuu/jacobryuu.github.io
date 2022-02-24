@@ -1,15 +1,15 @@
 {{ partial "head" . }}
 
 <body>
-{{ partial "header" . }}
+    {{ partial "header" . }}
 
-<div id="body">
-    <div class="container">
-        <div class="col-group">
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
 
-            <div class="col-8" id="main">
-                <div class="res-cons">
-                    {{ range $index, $data := (where .Paginator.Pages "Type" "post") }}
+                <div class="col-8" id="main">
+                    <div class="res-cons">
+                        {{ range $index, $data := (where .Paginator.Pages "Type" "post") }}
                         <article class="post">
                             <header>
                                 <h2 class="post-title">
@@ -22,9 +22,9 @@
                             </date>
                             {{ with .Params.Categories }}
                             <div class="post-meta meta-category">
-                                ，归类于
+                                ,classified as
                                 {{ range . }}
-                                    <a href="{{ "/categories/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
+                                <a href="{{ " /categories/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
                                 {{ end }}
                             </div>
                             {{ end }}
@@ -32,24 +32,25 @@
                             <div class="post-content summary{{ if $customSummary }} manual{{ else }} auto{{end}}">
                                 {{/** Prefer user-defined .description content, fallback to built-in summary **/}}
                                 {{ with .Description }}
-                                    {{ markdownify . }}
+                                {{ markdownify . }}
                                 {{ else }}
-                                    {{ .Summary }}
+                                {{ .Summary }}
                                 {{ end }}
                             </div>
                             <p class="readmore"><a href="{{ .Permalink }}">Read More</a></p>
                         </article>
-                    {{ end }}
+                        {{ end }}
 
-                    {{ partial "paginator" . }}
+                        {{ partial "paginator" . }}
+                    </div>
                 </div>
-            </div>
 
-            {{ partial "sidebar" . }}
+                {{ partial "sidebar" . }}
+            </div>
         </div>
     </div>
-</div>
-{{ partial "footer" . }}
+    {{ partial "footer" . }}
 
 </body>
+
 </html>

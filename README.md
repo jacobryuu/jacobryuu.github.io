@@ -1,2 +1,2 @@
 # jacobryuu.github.io
-blog
+Hugoで構築されております

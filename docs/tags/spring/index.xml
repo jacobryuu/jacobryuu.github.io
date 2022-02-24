@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spring on jacob&#39;s blog</title>
+    <link>https://jacobryuu.github.io/tags/spring/</link>
+    <description>Recent content in Spring on jacob&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 24 Feb 2022 16:25:40 +0900</lastBuildDate><atom:link href="https://jacobryuu.github.io/tags/spring/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SpringBoot Actuatorを使用してアプリの管理と監視を行う</title>
+      <link>https://jacobryuu.github.io/post/application-monitoring-with-spring-boot-actuator/</link>
+      <pubDate>Thu, 24 Feb 2022 16:25:40 +0900</pubDate>
+      
+      <guid>https://jacobryuu.github.io/post/application-monitoring-with-spring-boot-actuator/</guid>
+      <description>&lt;h2 id=&#34;springboot-actuatorとは&#34;&gt;SpringBoot Actuatorとは&lt;/h2&gt;
+&lt;p&gt;SpringBootアプリケーションを監視および管理するのための機能。
+機能を有効にするための設定方法は、&lt;code&gt;spring-boot-starter-actuator&lt;/code&gt;の「スターター」への依存関係を追加することです。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

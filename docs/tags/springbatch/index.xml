@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SpringBatch on jacob&#39;s blog</title>
+    <link>https://jacobryuu.github.io/tags/springbatch/</link>
+    <description>Recent content in SpringBatch on jacob&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 22 Feb 2022 12:25:40 +0900</lastBuildDate><atom:link href="https://jacobryuu.github.io/tags/springbatch/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spring Batch</title>
+      <link>https://jacobryuu.github.io/post/spring-batch/</link>
+      <pubDate>Tue, 22 Feb 2022 12:25:40 +0900</pubDate>
+      
+      <guid>https://jacobryuu.github.io/post/spring-batch/</guid>
+      <description>&lt;h2 id=&#34;spring-batch-architecture&#34;&gt;Spring Batch Architecture&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://jacobryuu.github.io/images/spring-batch-layers.png&#34; alt=&#34;Spring Batch Architecture&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;applicationレイアー&#34;&gt;Applicationレイアー&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;all batch jobs&lt;/li&gt;
+&lt;li&gt;custom code by developers&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

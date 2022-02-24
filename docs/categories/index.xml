@@ -5,6 +5,16 @@
     <link>https://jacobryuu.github.io/categories/</link>
     <description>Recent content in Categories on jacob&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://jacobryuu.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Thu, 24 Feb 2022 16:25:40 +0900</lastBuildDate><atom:link href="https://jacobryuu.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spring</title>
+      <link>https://jacobryuu.github.io/categories/spring/</link>
+      <pubDate>Thu, 24 Feb 2022 16:25:40 +0900</pubDate>
+      
+      <guid>https://jacobryuu.github.io/categories/spring/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>
