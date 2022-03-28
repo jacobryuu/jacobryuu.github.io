@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en-us">
+
+	<head>
+
+		<meta charset="utf-8" name="generator" content="Hugo 0.96.0">
+		<meta name="generator" content="Hugo 0.96.0" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title> - jacob&#39;s blog</title>
+		<meta property="og:title" content=" - jacob&#39;s blog">
+		<meta property="og:type" content="article">
+		
+		
+		<meta name="description" content="">
+		
+		<meta name="author" content="jacob">
+		<meta property="og:url" content="https://jacobryuu.github.io/post/mysql-01-innodb-storage-engine/">
+
+		<link rel="stylesheet" href="/css/normalize.css">
+		
+		<link rel="stylesheet" href="/css/syntax.css">
+		
+		<link rel="stylesheet" href="/css/style.css">
+
+		
+		<link rel="stylesheet" href="/css/style.extra.css">
+		</head>
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://jacobryuu.github.io">
+                        jacob&#39;s blog
+                    </a>
+                
+                <p class="description">......</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="https://jacobryuu.github.io">Blog</a>
+                    
+                    <a  href="https://jacobryuu.github.io/archives/" title="archives">
+                        archives
+                    </a>
+                    
+                    <a  href="https://jacobryuu.github.io/about/" title="About">
+                        About
+                    </a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    <div class="res-cons">
+                        <article class="post">
+                            <header>
+                                <h1 class="post-title"></h1>
+                            </header>
+                            <date class="post-meta meta-date">
+                                1年1月1日
+                                00:00
+                            </date>
+                            <aside id="toc" class="dismissed">
+                                <span class="toc-title">Catalog <a href="#" class="toc-dismiss"></a></span>
+                                <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#innodbの利点">InnoDBの利点</a></li>
+        <li><a href="#innodb-のアーキテクチャ">InnoDB のアーキテクチャ</a></li>
+        <li><a href="#インメモリー構造">インメモリー構造</a></li>
+        <li><a href="#innodb-オンディスク構造">InnoDB オンディスク構造</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                            </aside><div class="post-content">
+                                <hr>
+<p>title: &ldquo;InnoDB ストレージエンジン&rdquo;
+author: &ldquo;jacob&rdquo;
+date: 2022<em>03</em>03T16:06:46<em>09:00
+draft: true
+donation: false
+categories: [&ldquo;DB&rdquo;]
+tags: [&ldquo;Mysql&rdquo;]
+archives: [&ldquo;2022</em>03&rdquo;]</p>
+<hr>
+<h2 id="innodbの利点">InnoDBの利点</h2>
+<ul>
+<li>DML(データ操作言語)操作は、トランザクションにユーザーデータを保護するためのコミット、ロールバック、およびクラッシュリカバリ機能が備わっている ACID モデルに従っています
+<ul>
+<li>ACID モデル</li>
+<li>A: 原子性</li>
+<li>C: 一貫性</li>
+<li>I: 分離性</li>
+<li>D: 持続性</li>
+</ul>
+</li>
+<li>行レベルのロックと一貫性読み取りを使用すると、複数ユーザーの並列性およびパフォーマンスが向上します。</li>
+<li>InnoDB テーブルでは、主キーに基づいてクエリーが最適化されるように、ディスク上のデータが整列されます。</li>
+<li>FOREIGN KEY 制約がサポートされています</li>
+</ul>
+<h2 id="innodb-のアーキテクチャ">InnoDB のアーキテクチャ</h2>
+<ul>
+<li>インメモリー構造</li>
+<li>ディスク構造</li>
+</ul>
+<p><img src="/images/innodb*architecture.png" alt="InnoDB architecture"></p>
+<h2 id="インメモリー構造">インメモリー構造</h2>
+<ul>
+<li>バッファプール
+<ul>
+<li>大容量読み取り操作の効率を高めるため、バッファープールは複数行を保持できるページに分割されます。</li>
+<li>最低使用頻度 (LRU) アルゴリズムのバリエーションを使用してリストとして管理されます。</li>
+<li>バッファプールサイズ
+<ul>
+<li>SET ステートメントを使用して動的に設定でき、サーバーを再起動せずにバッファープールのサイズを変更できます</li>
+<li>常に innodb_buffer_pool_chunk_size * innodb_buffer_pool_instances と等しいか倍数である必要があります
+<ul>
+<li>innodb_buffer_pool_chunk_size は 1MB (1048576 バイト) 単位で増減できますが、起動時、コマンドライン文字列または MySQL構成ファイルでのみ変更できます。</li>
+<li>innodb_buffer_pool_chunk_size変更する場合、innodb_buffer_pool_sizeに影響があります。（要注意）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>変更バッファ
+<ul>
+<li>secondary index ページが buffer pool にない場合に、そのページに対する変更をキャッシュする特別なデータ構造です。</li>
+<li>セカンダリインデックスは通常一意ではなく、セカンダリインデックスへの挿入は比較的ランダムな順序で行われます。(削除および更新も)</li>
+<li>セカンダリインデックスページをディスクからバッファープールに読み込むために必要な大量のランダムアクセス I/O が回避されます。</li>
+<li>変更バッファの最大サイズの構成
+<ul>
+<li>変更バッファの最大サイズをバッファプールの合計サイズに対する割合として構成できます。</li>
+<li>innodb_change_buffer_max_size
+<ul>
+<li>デフォルトでは 25 に設定されます。 最大設定は 50 です。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>適応型ハッシュインデックス
+<ul>
+<li>innodb_adaptive_hash_index オプションによって有効化され、または skip_innodb_adaptive_hash_index オプションにより無効化されます。</li>
+</ul>
+</li>
+<li>ログバッファ
+<ul>
+<li>ディスク上のログファイルに書き込まれるデータを保持するメモリー領域です</li>
+<li>innodb_log_buffer_size 変数によって定義されます。
+<ul>
+<li>デフォルトのサイズは 16M バイトです。</li>
+</ul>
+</li>
+<li>ログバッファの内容は定期的にディスクにフラッシュされます。
+<ul>
+<li>innodb_flush_log_at_trx_commit 変数
+<ul>
+<li>ログバッファの内容をディスクに書き込む方法およびフラッシュする方法を制御します</li>
+</ul>
+</li>
+<li>innodb_flush_log_at_timeout 変数
+<ul>
+<li>ログのフラッシュ頻度を制御します</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="innodb-オンディスク構造">InnoDB オンディスク構造</h2>
+<ul>
+<li>
+<p>テーブル</p>
+<ul>
+<li>InnoDB テーブルの作成
+<ul>
+<li>略</li>
+</ul>
+</li>
+<li>外部でのテーブルの作成
+<ul>
+<li>DATA DIRECTORY 句の使用</li>
+<li>CREATE TABLE &hellip; TABLESPACE 構文の使用</li>
+<li>外部一般テーブルスペースでのテーブルの作成</li>
+</ul>
+</li>
+<li>InnoDB テーブルのインポート
+<ul>
+<li>前提条件
+<ul>
+<li>innodb_file_per_table 変数は、デフォルトで有効になっている必要があります。</li>
+<li>略</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>インデックス</p>
+<ul>
+<li>
+<p>クラスタインデックスとセカンダリインデックス</p>
+<ul>
+<li>すべての InnoDB テーブルは、行のデータが格納されているクラスタ化されたインデックスと呼ばれる特別なインデックスを持っています。</li>
+<li>テーブル上で PRIMARY KEY を定義すると、InnoDB ではそれがクラスタ化されたインデックスとして使用されます。</li>
+<li>PRIMARY KEYが定義されていない場合、MySQL はすべてのキーカラムが NOT NULL の UNIQUE インデックスを最初に検索し、InnoDB はそれをクラスタ化されたインデックスとして使用します。</li>
+<li>PRIMARY KEY インデックスまたは適切な UNIQUE インデックスがない場合
+<ul>
+<li>GEN_CLUST_INDEX という名前の非表示のクラスタインデックスを、行 ID 値を含む合成カラムに内部的に生成します。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>InnoDB インデックスの物理構造</p>
+<ul>
+<li>B*tree データ構造です</li>
+</ul>
+</li>
+<li>
+<p>ソートされたインデックス構築</p>
+<ul>
+<li>インデックス作成には 3 つのフェーズがあります
+<ul>
+<li>clustered index がスキャンされ、インデックスエントリが生成されてソートバッファに追加されます。 sort buffer がいっぱいになると、エントリはソートされ、一時中間ファイルに書き込まれます</li>
+<li>1 つ以上の実行が一時中間ファイルに書き込まれ、ファイル内のすべてのエントリに対してマージソートが実行されます</li>
+<li>ソートされたエントリが B*tree に挿入されます。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>InnoDB FULLTEXT インデックス</p>
+<ul>
+<li>InnoDB 全文インデックスの設計
+<ul>
+<li>転置インデックスの設計が使用されています</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>テーブルスペース</p>
+<ul>
+<li>システムテーブルスペース
+<ul>
+<li>データファイルのサイズと数は、innodb_data_file_path 起動オプションによって定義されます。</li>
+<li>innodb_data_file_path
+<ul>
+<li>データファイルの名前、サイズおよび属性を定義します。</li>
+</ul>
+</li>
+<li></li>
+</ul>
+</li>
+<li>file-per-table テーブルスペース</li>
+<li>一般テーブルスペース</li>
+<li>undo テーブルスペース</li>
+<li>一時テーブルスペース</li>
+<li>サーバーがオフラインのときのテーブルスペースファイルの移動</li>
+<li>テーブルスペースパス検証の無効化</li>
+<li>linux でのテーブルスペースの領域割当ての最適化</li>
+<li>テーブルスペースの autoextend_size 構成</li>
+</ul>
+</li>
+<li>
+<p>二重書き込みバッファー</p>
+</li>
+<li>
+<p>redo ログ</p>
+</li>
+<li>
+<p>undo ログ</p>
+</li>
+</ul>
+
+                            </div>
+
+                            <div class="post-meta meta-tags">
+                                
+                                without labels
+                                
+                            </div>
+                        </article>
+                        <div id="post-donation">
+  <button id="post-donation-button" title="hidden/show Donate info">
+    Donate
+  </button>
+  <div id="post-donation-qrcodes"><div class="post-donation-qrcode alipay">
+      <img src="https://jacobryuu.github.io/alipay_qrcode.png">
+      
+      <p>Via Alipay</p>
+    </div><div class="post-donation-qrcode wechat">
+      <img src="https://jacobryuu.github.io/wechat_donation_qrcode.png">
+      
+      <p>Via Wechat</p>
+    </div></div>
+</div>
+                        <div id="comments"><span class="widget-title">comment</span>
+  <script src="https://utteranc.es/client.js"
+          repo="jacobryuu/comments"
+          issue-term="url"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+  </script></div>
+
+                    </div>
+                </div>
+                <div id="secondary">
+    <section class="widget">
+        
+    
+<form id="search" method="POST" action="https://duckduckgo.com/">
+    
+    <input type="text" name="q" maxlength="255" placeholder="Search...">
+    
+    <input type="hidden" name="sites" value="https://jacobryuu.github.io">
+    
+    <input type="hidden" name="kp" value="-2">
+    
+    <input type="hidden" name="kh" value="1">
+    
+    <input type="hidden" name="kl" value="wt-wt">
+    
+    <input type="hidden" name="kg" value="p">
+    
+    <input type="hidden" name="kaf" value="1">
+    
+    
+    <input type="hidden" name="k1" value="-1">
+
+    
+
+    
+    
+    <input type="hidden" name="k7" value="#ffffff">
+    
+    <input type="hidden" name="kj" value="#ffffff">
+    
+    <input type="hidden" name="ky" value="#eaeaea">
+    
+    <input type="hidden" name="kx" value="#6E7173">
+    
+    <input type="hidden" name="k8" value="#444">
+    
+    <input type="hidden" name="k9" value="#6E7173">
+    
+    <input type="hidden" name="kaa" value="#6E7173">
+    
+    <input type="hidden" name="kae" value="#6E7173">
+
+    
+    
+    <input type="hidden" name="ko" value="1">
+    
+    <input type="hidden" name="kt" value="n">
+    
+    <input type="hidden" name="ka" value="g">
+    
+    <input type="hidden" name="ks" value="l">
+    
+    <input type="hidden" name="kv" value="1">
+
+    <button type="submit" class="submit icon-search"></button>
+</form>
+
+
+
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title">categories</h3>
+        <ul class="widget-list">
+            
+            <li>
+                <a href="/categories/spring">
+                    spring (2)
+                </a>
+            </li>
+            
+        </ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title"></h3>
+        <ul class="widget-list">
+            <li><a href="/index.xml">Article RSS</a></li>
+        </ul>
+    </section>
+</div>
+            </div>
+        </div>
+    </div>
+    <footer id="footer">
+    <div class="container">
+      &copy; 2022 <a rel="nofollow" href="https://jacobryuu.github.io">jacob&#39;s blog</a>.
+        Powered by <a rel="nofollow noreferer noopener" href="https://gohugo.io">Hugo</a> &amp; <a rel="nofollow noreferer noopener" href="https://github.com/JokerQyou/maupassant-hugo">maupassant theme</a>.
+    </div>
+</footer>
+
+<script type="text/javascript" src="/js/app.js" defer></script>
+
+
+<script type="text/javascript" src="/js/app.extra.js" defer></script>
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' defer></script>
+
+
+</body>
+
+</html>

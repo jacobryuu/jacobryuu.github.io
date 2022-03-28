@@ -3,8 +3,8 @@
 
 	<head>
 
-		<meta charset="utf-8" name="generator" content="Hugo 0.92.2">
-		<meta name="generator" content="Hugo 0.92.2" />
+		<meta charset="utf-8" name="generator" content="Hugo 0.96.0">
+		<meta name="generator" content="Hugo 0.96.0" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -123,7 +123,7 @@
 <li>
 <p>Gradle の場合、</p>
 <pre tabindex="0"><code class="language-code" data-lang="code">dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation &#39;org.springframework.boot:spring-boot-starter-actuator&#39;
 }
 </code></pre></li>
 </ul>
@@ -159,14 +159,14 @@
   server:
     port: 8808  //default applicationと同じport, Actuatorのみportを分けることも可能です。　
                 //port: -1：HTTP 経由でエンドポイントを公開したくない
-    address: &quot;127.0.0.1&quot; //リモード接続不可
+    address: &#34;127.0.0.1&#34; //リモード接続不可
   endpoints:
     shutdown:
       enabled: true　//shutdown endpoint有効にする
     web:
       base-path: /manage　　　//default /actuator
       exposure:
-        include: '*'    // default /healthと/infoのみ公開
+        include: &#39;*&#39;    // default /healthと/infoのみ公開
         exclude: env　　// /endpoint除外する
   endpoint:
     health:
@@ -177,14 +177,14 @@
 <li>
 <p>新規作成</p>
 <pre tabindex="0"><code class="language-code" data-lang="code">@Component
-@WebEndpoint(id = &quot;custom&quot;)   // localhost:8080/actuator/customでアクセスする
+@WebEndpoint(id = &#34;custom&#34;)   // localhost:8080/actuator/customでアクセスする
 public class CustomEndpoint {
 
     @ReadOperation
     public Map&lt;String,String&gt; readEndPoint() {
         Map&lt;String,String&gt; point = new ConcurrentHashMap&lt;&gt;();
-        point.put(&quot;name&quot;,&quot;customEndpoint&quot;);
-        point.put(&quot;now time is:&quot;, LocalDateTime.now().format(DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd HH:mm:ss&quot;)));
+        point.put(&#34;name&#34;,&#34;customEndpoint&#34;);
+        point.put(&#34;now time is:&#34;, LocalDateTime.now().format(DateTimeFormatter.ofPattern(&#34;yyyy-MM-dd HH:mm:ss&#34;)));
         return point;
     }
 }
@@ -232,8 +232,8 @@ public class CustomEndpoint {
 <ul>
 <li>
 <p><code>/actuator</code>のみ保護する</p>
-<pre tabindex="0"><code class="language-code" data-lang="code">    .pathMatchers(&quot;/actuator/**&quot;)
-    .hasAuthority(&quot;ROLE_ADMIN&quot;)
+<pre tabindex="0"><code class="language-code" data-lang="code">    .pathMatchers(&#34;/actuator/**&#34;)
+    .hasAuthority(&#34;ROLE_ADMIN&#34;)
 </code></pre></li>
 </ul>
 </li>
